@@ -6,7 +6,7 @@ pipeline {
     CONDA = "/home/adriano/anaconda3/condabin/conda"
     CONDAENV = "databricks"
     DBURL = "https://adb-6840195589605290.10.azuredatabricks.net"
-    TOKEN = "dapi0d85b117bfedd50a37a58816eef0438e-3"
+    DBTOKEN = "dapi0d85b117bfedd50a37a58816eef0438e-3"
     CLUSTERID = "1228-220746-bqqkddxs"
   }
 
