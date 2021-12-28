@@ -5,7 +5,8 @@ pipeline {
       stage('Begin') {
         steps {
             sh '''#!/usr/bin/env bash
-            echo "Inicianddo os trabalhos"            
+            echo "Inicianddo os trabalhos"      
+            conda info      
             '''
         }
     }
