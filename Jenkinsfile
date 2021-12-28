@@ -1,7 +1,6 @@
 pipeline {
   agent any
 
-
   environment {
     CONDA = "/home/adriano/anaconda3/condabin/conda"
     CONDAENV = "databricks"
@@ -10,7 +9,6 @@ pipeline {
     CLUSTERID = "1228-220746-bqqkddxs"
   }
 
-
   stages {
 
       stage('Begin') {
@@ -18,6 +16,19 @@ pipeline {
             sh '''#!/usr/bin/env bash
             echo "Inicianddo os trabalhos"      
             $CONDA info      
+            pip install -U databricks-cli
+            '''
+        }
+    }
+
+    stage('Execute Notebook') {
+        steps {
+            sh '''#!/usr/bin/env bash
+            echo "Inicianddo os trabalhos"      
+            $CONDA info
+
+            ${CONDA} activate ${CONDAENV}      
+            pip install -U databricks-cli
             '''
         }
     }
@@ -27,18 +38,13 @@ pipeline {
             withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) {
             sh """#!/bin/bash
                 # Configure Conda environment for deployment & testing
-                source ${CONDA} activate ${CONDAENV}
+                ${CONDA} activate ${CONDAENV}
 
                 # Configure Databricks CLI for deployment
-                echo "${DBURL}
-                $TOKEN" | databricks configure --token
+                echo "${DBURL} $TOKEN" | databricks configure --token
 
                 # Configure Databricks Connect for testing
-                echo "${DBURL}
-                $TOKEN
-                ${CLUSTERID}
-                0
-                15001" | databricks-connect configure
+                echo "${DBURL} $TOKEN ${CLUSTERID} 0 15001" | databricks-connect configure
                 """
             }
         }
