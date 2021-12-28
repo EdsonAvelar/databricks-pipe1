@@ -20,7 +20,8 @@ pipeline {
         conda env create -f envs/snakemake-workflows.yaml
         '''
     }
-    
+  }
+
     stage('Test downloading') {
         steps {
             sh '''#!/usr/bin/env bash
@@ -30,4 +31,6 @@ pipeline {
             '''
         }
     }
+    
+  
 }
