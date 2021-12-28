@@ -1,12 +1,20 @@
 pipeline {
   agent any
+
+
+  environment {
+    CONDA = "/home/adriano/anaconda3/condabin/conda"
+   
+  }
+
+
   stages {
 
       stage('Begin') {
         steps {
             sh '''#!/usr/bin/env bash
             echo "Inicianddo os trabalhos"      
-            conda info      
+            $CONDA info      
             '''
         }
     }
