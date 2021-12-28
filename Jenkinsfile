@@ -1,5 +1,4 @@
 pipeline {
-  agent any
   stage('setup miniconda') {
     steps {
         sh '''#!/usr/bin/env bash
@@ -31,6 +30,4 @@ pipeline {
             '''
         }
     }
-    
-  
 }
