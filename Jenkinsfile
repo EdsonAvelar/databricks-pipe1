@@ -23,22 +23,24 @@ pipeline {
     }
 
     stage('Setup Databricks') {
-        withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) {
-        sh """#!/bin/bash
-            # Configure Conda environment for deployment & testing
-            source ${CONDA} activate ${CONDAENV}
+        steps {
+            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) {
+            sh """#!/bin/bash
+                # Configure Conda environment for deployment & testing
+                source ${CONDA} activate ${CONDAENV}
 
-            # Configure Databricks CLI for deployment
-            echo "${DBURL}
-            $TOKEN" | databricks configure --token
+                # Configure Databricks CLI for deployment
+                echo "${DBURL}
+                $TOKEN" | databricks configure --token
 
-            # Configure Databricks Connect for testing
-            echo "${DBURL}
-            $TOKEN
-            ${CLUSTERID}
-            0
-            15001" | databricks-connect configure
-            """
+                # Configure Databricks Connect for testing
+                echo "${DBURL}
+                $TOKEN
+                ${CLUSTERID}
+                0
+                15001" | databricks-connect configure
+                """
+            }
         }
     }
   }
