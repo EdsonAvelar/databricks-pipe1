@@ -1,6 +1,15 @@
 pipeline {
   agent any
   stages {
+
+      stage('Begin') {
+        steps {
+            sh '''#!/usr/bin/env bash
+            echo "Inicianddo os trabalhos"            
+            '''
+        }
+    }
+
      stage('setup miniconda') {
     steps {
         sh '''#!/usr/bin/env bash
