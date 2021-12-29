@@ -8,6 +8,8 @@ pipeline {
     DBTOKEN = "dapi0d85b117bfedd50a37a58816eef0438e-3"
     CLUSTERID = "1228-220746-bqqkddxs"
     DATABRICKS = "/home/adriano/anaconda3/bin/databricks"
+    DBWORKSPACE = "/Users/edson.avelar@actdigital.com"
+
   }
 
   stages {
@@ -27,12 +29,14 @@ pipeline {
             sh '''#!/usr/bin/env bash
             echo "Inicianddo os trabalhos"      
             $CONDA info
-
+            $CONDA init bash
             ${CONDA} activate ${CONDAENV}      
-            pip install -U databricks-cli
+           
             '''
         }
     }
+
+
 
     stage('Setup Databricks') {
         steps {
@@ -46,6 +50,9 @@ pipeline {
 
                 # Configure Databricks Connect for testing
                 echo "${DBURL} $TOKEN ${CLUSTERID} 0 15001" | databricks-connect configure
+
+
+                databricks workspace import deploy_ml_model.py $DBWORKSPACE/Demo/Test/d eploy_ml_model --language PYTHON -o
                 """
             }
         }
