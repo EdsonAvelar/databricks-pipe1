@@ -7,6 +7,7 @@ pipeline {
     DBURL = "https://adb-6840195589605290.10.azuredatabricks.net"
     DBTOKEN = "dapi0d85b117bfedd50a37a58816eef0438e-3"
     CLUSTERID = "1228-220746-bqqkddxs"
+    DATABRICKS = "/home/adriano/anaconda3/bin/databricks"
   }
 
   stages {
