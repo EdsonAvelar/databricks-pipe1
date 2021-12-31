@@ -3,13 +3,6 @@ pipeline {
 
   environment {
     CONDA = "/home/adriano/anaconda3/condabin/conda"
-    CONDAENV = "databricks"
-    DBURL = "https://adb-6840195589605290.10.azuredatabricks.net"
-    DBTOKEN = "dapi0d85b117bfedd50a37a58816eef0438e-3"
-    CLUSTERID = "1228-220746-bqqkddxs"
-    DATABRICKS = "/home/adriano/anaconda3/bin/databricks"
-    DBWORKSPACE = "/Users/edson.avelar@actdigital.com"
-
   }
 
   stages {
@@ -17,26 +10,16 @@ pipeline {
       stage('Begin') {
         steps {
             sh '''#!/usr/bin/env bash
-            echo "Inicianddo os trabalhos"      
-            $CONDA info      
-            pip install -U databricks-cli
-            '''
-        }
-    }
-
-    stage('Execute Notebook') {
-        steps {
-            sh '''#!/usr/bin/env bash
-
-            source /home/adriano/anaconda3/etc/profile.d/conda.sh
-            $CONDA activate ${CONDAENV}  
-            #echo ${CONDA} activate ${CONDAENV}      
-            #${CONDA} activate ${CONDAENV}    
-
-            python pipelineScript/create_cluster.py
+            echo "Inicianddo os trabalhos"  
+            mkdir -p venv_dir
+            python -m venv venv_dir
+            
+            . ./venv_dir/bin/activate
+            pip install -r requirements.txt
            
             '''
         }
     }
+
   }
 }
