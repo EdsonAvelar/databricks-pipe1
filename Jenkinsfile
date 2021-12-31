@@ -7,8 +7,7 @@ pipeline {
   }
 
   stages {
-
-      stage('Begin') {
+     stage('Begin') {
         steps {
             sh '''#!/usr/bin/env bash
             echo "Inicianddo os trabalhos"  
@@ -16,9 +15,8 @@ pipeline {
             bash miniconda.sh -b -p $WORKSPACE/miniconda
             conda config --set always_yes yes --set changeps1 no
             conda update -q conda
-
             conda create --name mlops
-           
+
             '''
         }
 
@@ -26,10 +24,8 @@ pipeline {
             sh '''#!/usr/bin/env bash
             source $WORKSPACE/miniconda/etc/profile.d/conda.sh
             conda activate miniconda/envs/mlops/
-           
             '''
         }
     }
-
   }
 }
