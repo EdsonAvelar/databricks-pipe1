@@ -28,7 +28,7 @@ pipeline {
         steps {
             sh '''#!/usr/bin/env bash
             $CONDA init
-
+            sleep 5
             echo ${CONDA} activate ${CONDAENV}      
             ${CONDA} activate ${CONDAENV}    
 
