@@ -3,6 +3,7 @@ pipeline {
 
   environment {
     CONDA = "/home/adriano/anaconda3/condabin/conda"
+    WORKSPACE = '.'
   }
 
   stages {
@@ -11,11 +12,20 @@ pipeline {
         steps {
             sh '''#!/usr/bin/env bash
             echo "Inicianddo os trabalhos"  
-            mkdir -p venv_dir
-            python -m venv venv_dir
-            
-            . ./venv_dir/bin/activate
-            pip install -r requirements.txt
+            wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -nv -O miniconda.sh
+            bash miniconda.sh -b -p $WORKSPACE/miniconda
+            conda config --set always_yes yes --set changeps1 no
+            conda update -q conda
+
+            conda create --name mlops
+           
+            '''
+        }
+
+        steps {
+            sh '''#!/usr/bin/env bash
+            source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+            conda activate miniconda/envs/mlops/
            
             '''
         }
