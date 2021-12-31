@@ -20,12 +20,7 @@ pipeline {
             '''
         }
 
-        steps {
-            sh '''#!/usr/bin/env bash
-            source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-            conda activate miniconda/envs/mlops/
-            '''
-        }
+     
     }
   }
 }
