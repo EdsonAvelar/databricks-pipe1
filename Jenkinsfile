@@ -27,10 +27,11 @@ pipeline {
     stage('Execute Notebook') {
         steps {
             sh '''#!/usr/bin/env bash
-            $CONDA init
-            sleep 5
-            echo ${CONDA} activate ${CONDAENV}      
-            ${CONDA} activate ${CONDAENV}    
+
+            source /home/adriano/anaconda3/etc/profile.d/conda.sh
+            $CONDA activate ${CONDAENV}  
+            #echo ${CONDA} activate ${CONDAENV}      
+            #${CONDA} activate ${CONDAENV}    
 
             python pipelineScript/create_cluster.py
            
