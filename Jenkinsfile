@@ -7,7 +7,7 @@ pipeline {
   }
 
   stages {
-     stage('Begin') {
+     stage('Install Miniconda') {
         steps {
             sh '''#!/usr/bin/env bash
             echo "Inicianddo os trabalhos"  
@@ -21,6 +21,15 @@ pipeline {
         }
 
      
+    }
+
+    stage('Activate Enviroment') {
+          steps {
+            sh '''#!/usr/bin/env bash
+            source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+            conda activate miniconda/envs/mlops/
+            '''
+          }
     }
   }
 }
