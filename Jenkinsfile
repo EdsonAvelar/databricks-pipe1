@@ -35,6 +35,8 @@ pipeline {
             sh '''#!/usr/bin/env bash
             source $WORKSPACE/miniconda/etc/profile.d/conda.sh
             conda activate miniconda/envs/mlops/
+
+            python pipelineScripts/create_cluster.py
             '''
           }
     }
