@@ -27,34 +27,14 @@ pipeline {
     stage('Execute Notebook') {
         steps {
             sh '''#!/usr/bin/env bash
-            echo "Inicianddo os trabalhos"      
-            $CONDA info
-            $CONDA init bash
-            ${CONDA} activate ${CONDAENV}      
+            $CONDA init
+
+            echo ${CONDA} activate ${CONDAENV}      
+            ${CONDA} activate ${CONDAENV}    
+
+            python pipelineScript/create_cluster.py
            
             '''
-        }
-    }
-
-
-
-    stage('Setup Databricks') {
-        steps {
-            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) {
-            sh """#!/bin/bash
-                # Configure Conda environment for deployment & testing
-                ${CONDA} activate ${CONDAENV}
-
-                # Configure Databricks CLI for deployment
-                echo "${DBURL} $TOKEN" | databricks configure --token
-
-                # Configure Databricks Connect for testing
-                echo "${DBURL} $TOKEN ${CLUSTERID} 0 15001" | databricks-connect configure
-
-
-                databricks workspace import deploy_ml_model.py $DBWORKSPACE/Demo/Test/d eploy_ml_model --language PYTHON -o
-                """
-            }
         }
     }
   }
