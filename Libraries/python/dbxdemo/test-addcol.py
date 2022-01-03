@@ -23,7 +23,7 @@ class TestAppendCol(object):
         ["first_name", "last_name", "email"]
     )
 
-    actual_df = self.with_status(self, source_df)
+    actual_df = self.with_status(source_df)
 
     expected_data = [
         ("paula", "white", "paula.white@example.com", "checked"),

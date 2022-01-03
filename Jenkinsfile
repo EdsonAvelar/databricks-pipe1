@@ -14,7 +14,6 @@ pipeline {
     OUTFILEPATH     = "./Validation/Output"
     NOTEBOOKPATH = "./Notebooks"
     WORKSPACEPATH   = "/Shared"
-
   }
 
   stages {
@@ -139,6 +138,10 @@ pipeline {
                       --workspacepath=${WORKSPACEPATH}\
                       --outfilepath=${OUTFILEPATH}
                 """
+                python executenotebook.py --workspace="https://adb-6840195589605290.10.azuredatabricks.net" \
+                --token="dapi0d85b117bfedd50a37a58816eef0438e-3" \
+                --clusterid="1228-220746-bqqkddxs" --localpath="./" --workspacepath="/Shared" \
+                --outfilepath="./Validation/Output"
            }
       }
     }

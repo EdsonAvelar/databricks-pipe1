@@ -16,6 +16,8 @@ def main():
   workspacepath = ''
   outfilepath = ''
 
+  print("Execute Notebook was Called!")
+
   try:
       opts, args = getopt.getopt(sys.argv[1:], 'hs:t:c:lwo',
                                  ['workspace=', 'token=', 'clusterid=', 'localpath=', 'workspacepath=', 'outfilepath='])
