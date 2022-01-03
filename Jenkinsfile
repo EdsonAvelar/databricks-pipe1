@@ -2,7 +2,6 @@ pipeline {
   agent any
 
   environment {
-    
     WORKSPACE = '.'
     DBRKS_BEARER_TOKEN = "xyz"
     DBTOKEN="DBTOKEN"
@@ -11,7 +10,6 @@ pipeline {
 
     TESTRESULTPATH="./teste_results"
     LIBRARYPATH     = "./Libraries"
-
   }
 
   stages {
@@ -105,15 +103,7 @@ pipeline {
             throw err
           }
         }
-
-        
       }
     }
-
-
-
-
-
-
   } 
 }
