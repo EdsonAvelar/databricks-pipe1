@@ -113,7 +113,7 @@ pipeline {
       }
     }
 
-    stage('Configure Databricks') {
+    stage('Execute Notebook') {
       steps {
            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 
             sh """#!/bin/bash
