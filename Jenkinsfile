@@ -33,6 +33,21 @@ pipeline {
 
     }
 
+    stage('Install Requirements') {
+        steps {
+            sh '''#!/usr/bin/env bash
+            echo "Installing Requirements"  
+            source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+            conda activate miniconda/envs/mlops/
+
+            pip install -r requirements.txt
+
+            '''
+        }
+
+    }
+    
+
      stage('Configure Databricks') {
         steps {
            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 

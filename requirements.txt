@@ -1,1 +1,1 @@
-pip install -U databricks-cli
+databricks-cli=0.16.2
