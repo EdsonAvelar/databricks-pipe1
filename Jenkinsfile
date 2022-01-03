@@ -36,8 +36,7 @@ pipeline {
             source $WORKSPACE/miniconda/etc/profile.d/conda.sh
             conda activate miniconda/envs/mlops/
 
-            DBRKS_BEARER_TOKEN = $DBRKS_BEARER_TOKEN
-            export DBRKS_BEARER_TOKEN
+            export DBRKS_BEARER_TOKEN=$DBRKS_BEARER_TOKEN
 
             python pipelineScripts/create_cluster.py 
             '''
