@@ -1,7 +1,15 @@
+def getFolderName() {
+  def array = pwd().split("/")
+  return array[array.length - 2];
+}
+
 pipeline {
   agent any
 
   environment {
+    
+    foldername = getFolderName()
+
     WORKSPACE = '.'
     DBRKS_BEARER_TOKEN = "xyz"
     DBTOKEN="DBTOKEN"
@@ -10,6 +18,10 @@ pipeline {
 
     TESTRESULTPATH="./teste_results"
     LIBRARYPATH     = "./Libraries"
+    OUTFILEPATH     = "./Validation/Output"
+    NOTEBOOKPATH = "./Notebooks"
+    WORKSPACEPATH   = "/Shared/${foldername}"
+
   }
 
   stages {
@@ -105,5 +117,31 @@ pipeline {
         }
       }
     }
+
+    stage('Configure Databricks') {
+        steps {
+           withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 
+            sh """#!/bin/bash
+                
+                source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                conda activate mlops2
+
+                #pip install -r requirements.txt
+                export PATH="$HOME/.local/bin:$PATH"
+                echo $PATH
+          
+                python executenotebook.py --workspace=${DBURL}\
+                      --token=$TOKEN\
+                      --clusterid=${CLUSTERID}\
+                      --localpath=${NOTEBOOKPATH}\
+                      --workspacepath=${WORKSPACEPATH}\
+                      --outfilepath=${OUTFILEPATH}
+                  """
+           }
+      }
+    }
+
+
+    
   } 
 }
