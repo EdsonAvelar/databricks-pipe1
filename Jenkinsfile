@@ -9,11 +9,9 @@ pipeline {
     CLUSTERID="1228-220746-bqqkddxs"
     DBURL="https://adb-6840195589605290.10.azuredatabricks.net"
 
-  
     TESTRESULTPATH="./teste_results"
-    LIBRARYPATH     = "./lib"
+    LIBRARYPATH     = "./Libraries"
 
-    
   }
 
   stages {
@@ -98,7 +96,7 @@ pipeline {
                 conda activate mlops2
 
                 # Python tests for libs
-                python -m pytest --junit-xml=${TESTRESULTPATH}/TEST-libout.xml ${LIBRARYPATH}/test/test*.py || true
+                python -m pytest --junit-xml=${TESTRESULTPATH}/TEST-libout.xml ${LIBRARYPATH}/python/dbxdemo/test*.py || true
                 """
           } catch(err) {
             step([$class: 'JUnitResultArchiver', testResults: '--junit-xml=${TESTRESULTPATH}/TEST-*.xml'])
