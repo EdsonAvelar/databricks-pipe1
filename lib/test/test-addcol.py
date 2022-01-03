@@ -9,7 +9,6 @@ class TestAppendCol(object):
         self.spark = SparkSession.builder.getOrCreate()
         return self.spark
 
-    
     def test_with_status(self):
         source_data = [
             ("paula", "white", "paula.white@example.com"),
@@ -20,7 +19,7 @@ class TestAppendCol(object):
             ["first_name", "last_name", "email"]
         )
 
-        actual_df =source_df.withColumn("status", F.lit("checked"))
+        actual_df = source_df.withColumn("status", F.lit("checked"))
 
         expected_data = [
             ("paula", "white", "paula.white@example.com", "checked"),
