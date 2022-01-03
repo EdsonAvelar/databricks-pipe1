@@ -33,7 +33,25 @@ pipeline {
 
     }
 
+    stage('Install Requirements') {
+        steps {
+            sh '''#!/usr/bin/env bash
+            echo "Installing Requirements"  
+            source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+            conda activate mlops2
 
+            export PATH="$HOME/.local/bin:$PATH"
+            echo $PATH
+
+            pip install --user databricks-cli
+            databricks --version
+
+
+            
+           '''
+        }
+
+    }
     
       stage('Configure Databricks') {
         steps {
