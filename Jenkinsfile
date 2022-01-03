@@ -10,37 +10,19 @@ pipeline {
   stages {
      stage('Install Miniconda') {
         steps {
-            sh '''#!/usr/bin/env bash
-            echo "Inicianddo os trabalhos"  
-            wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -nv -O miniconda.sh
+           withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 
+            sh """#!/bin/bash
+                # Configure Conda environment for deployment & testing
+                source ${CONDAPATH}/bin/activate ${CONDAENV}
 
-            rm -r $WORKSPACE/miniconda
-            bash miniconda.sh -b -p $WORKSPACE/miniconda
-            
-            export PATH="$WORKSPACE/miniconda/bin:$PATH"
-            
-            echo $PATH
+                # Configure Databricks CLI for deployment
+                echo "${DBURL} $TOKEN" | databricks configure --token
 
-            conda config --set always_yes yes --set changeps1 no
-            conda update -q conda
-            conda create --name mlops
-
-            '''
-        }
-
+                # Configure Databricks Connect for testing
+                echo "${DBURL} $TOKEN ${CLUSTERID} 0 15001" | databricks-connect configure
+              """
+           }
+      }
     }
-
-    stage('Activate Enviroment') {
-          steps {
-            sh '''#!/usr/bin/env bash
-            source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-            conda activate miniconda/envs/mlops/
-
-            export DBRKS_BEARER_TOKEN=$DBRKS_BEARER_TOKEN
-
-            python pipelineScripts/create_cluster.py 
-            '''
-          }
-    }
-  }
+  } 
 }
