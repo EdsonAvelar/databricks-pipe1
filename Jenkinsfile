@@ -23,12 +23,11 @@ pipeline {
 
             conda config --set always_yes yes --set changeps1 no
             conda update -q conda
-            conda create --name mlopss
+            conda create --name mlops
 
             '''
         }
 
-     
     }
 
     stage('Activate Enviroment') {
@@ -37,8 +36,10 @@ pipeline {
             source $WORKSPACE/miniconda/etc/profile.d/conda.sh
             conda activate miniconda/envs/mlops/
 
-            python pipelineScripts/create_cluster.py { WORKSPACE= $WORKSPACE }
+            DBRKS_BEARER_TOKEN = $DBRKS_BEARER_TOKEN
+            export DBRKS_BEARER_TOKEN
 
+            python pipelineScripts/create_cluster.py 
             '''
           }
     }
