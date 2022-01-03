@@ -6,7 +6,7 @@ import json
 class ClusterManager():
     def __init__(self) -> None:
         
-        print(dir(os.environ))
+        print('DBRKS_BEARER_TOKEN: ',os.environ['DBRKS_BEARER_TOKEN'])
 
         self.DBRKS_REQ_HEADERS = {
             'Authorization': 'Bearer ' + os.environ['DBRKS_BEARER_TOKEN'],
