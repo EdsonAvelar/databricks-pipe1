@@ -1,14 +1,9 @@
-def getFolderName() {
-  def array = pwd().split("/")
-  return array[array.length - 2];
-}
-
 pipeline {
   agent any
 
   environment {
     
-    foldername = getFolderName()
+    foldername = pwd().split("/")[array.length - 2]
 
     WORKSPACE = '.'
     DBRKS_BEARER_TOKEN = "xyz"
