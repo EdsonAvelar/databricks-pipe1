@@ -58,11 +58,11 @@ pipeline {
            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 
             sh """#!/bin/bash
                 
-                #source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                source $WORKSPACE/miniconda/etc/profile.d/conda.sh
                 conda activate mlops2
 
                 #pip install -r requirements.txt
-
+                export PATH="$HOME/.local/bin:$PATH"
                 echo $PATH
           
                 # Configure Databricks CLI for deployment
