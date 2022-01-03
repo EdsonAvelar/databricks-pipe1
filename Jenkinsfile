@@ -5,6 +5,7 @@ pipeline {
     CONDA = "/home/adriano/anaconda3/condabin/conda"
     WORKSPACE = '.'
     DBRKS_BEARER_TOKEN = "xyz"
+    DBTOKEN="DBTOKEN"
   }
 
   stages {
@@ -13,6 +14,9 @@ pipeline {
            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 
             sh """#!/bin/bash
                 # Configure Conda environment for deployment & testing
+
+                echo $TOKEN
+                
                 source ${CONDAPATH}/bin/activate ${CONDAENV}
 
                 # Configure Databricks CLI for deployment
