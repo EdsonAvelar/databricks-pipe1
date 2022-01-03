@@ -40,21 +40,21 @@ pipeline {
             source $WORKSPACE/miniconda/etc/profile.d/conda.sh
             conda activate miniconda/envs/mlops/
 
-            pip install -r requirements.txt
-
-            '''
+            
+           '''
         }
 
     }
     
-
-     stage('Configure Databricks') {
+      stage('Configure Databricks') {
         steps {
            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 
             sh """#!/bin/bash
                 
                 source $WORKSPACE/miniconda/etc/profile.d/conda.sh
                 conda activate miniconda/envs/mlops/
+
+                pip install -r requirements.txt
 
                 # Configure Databricks CLI for deployment
                 echo "${DBURL} $TOKEN" | databricks configure --token
