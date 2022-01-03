@@ -56,6 +56,8 @@ def main():
   for path, subdirs, files in os.walk(localpath):
       for name in files:
           fullpath = path + '/' + name
+
+          print(fullpath)
           # removes localpath to repo but keeps workspace path
           fullworkspacepath = workspacepath + path.replace(localpath, '')
 
@@ -99,10 +101,10 @@ def main():
               break
           i=i+1
 
-      if outfilepath != '':
+      '''if outfilepath != '':
           file = open(outfilepath + '/' +  str(runid) + '.json', 'w')
           file.write(json.dumps(j))
-          file.close()
+          file.close()'''
 
 if __name__ == '__main__':
   main()
