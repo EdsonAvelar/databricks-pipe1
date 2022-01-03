@@ -2,10 +2,12 @@ pipeline {
   agent any
 
   environment {
-    CONDA = "/home/adriano/anaconda3/condabin/conda"
+    
     WORKSPACE = '.'
     DBRKS_BEARER_TOKEN = "xyz"
     DBTOKEN="DBTOKEN"
+    CLUSTERID="1228-220746-bqqkddxs"
+    DBURL="adb-6840195589605290.10.azuredatabricks.net"
   }
 
   stages {
