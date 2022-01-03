@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     
-    foldername = pwd().split("/")[array.length - 2]
+
 
     WORKSPACE = '.'
     DBRKS_BEARER_TOKEN = "xyz"
@@ -15,7 +15,7 @@ pipeline {
     LIBRARYPATH     = "./Libraries"
     OUTFILEPATH     = "./Validation/Output"
     NOTEBOOKPATH = "./Notebooks"
-    WORKSPACEPATH   = "/Shared/${foldername}"
+    WORKSPACEPATH   = "/Shared"
 
   }
 
@@ -114,7 +114,7 @@ pipeline {
     }
 
     stage('Configure Databricks') {
-        steps {
+      steps {
            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 
             sh """#!/bin/bash
                 
@@ -131,7 +131,7 @@ pipeline {
                       --localpath=${NOTEBOOKPATH}\
                       --workspacepath=${WORKSPACEPATH}\
                       --outfilepath=${OUTFILEPATH}
-                  """
+                """
            }
       }
     }
