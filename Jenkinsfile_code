@@ -5,6 +5,11 @@ pipeline {
     CONDA = "/home/adriano/anaconda3/condabin/conda"
     WORKSPACE = '.'
     DBRKS_BEARER_TOKEN = "xyz"
+    DBRKS_SUBSCRIPTION_ID = "ba7ab45a-fb7f-4634-a70b-481958e93a87"
+    DBRKS_RESOURCE_GROUP = "Dados"
+    DBRKS_WORKSPACE_NAME = "databricks-01"
+    DBRKS_INSTANCE = "adb-6840195589605290.10"
+    DBRKS_MANAGEMENT_TOKEN = 
   }
 
   stages {
@@ -24,8 +29,7 @@ pipeline {
             conda config --set always_yes yes --set changeps1 no
             conda update -q conda
             conda create --name mlops
-
-            '''
+           '''
         }
 
     }

@@ -7,7 +7,7 @@ pipeline {
     DBRKS_BEARER_TOKEN = "xyz"
     DBTOKEN="DBTOKEN"
     CLUSTERID="1228-220746-bqqkddxs"
-    DBURL="adb-6840195589605290.10.azuredatabricks.net"
+    DBURL="https://adb-6840195589605290.10.azuredatabricks.net"
   }
 
   stages {
@@ -26,7 +26,7 @@ pipeline {
 
             conda config --set always_yes yes --set changeps1 no
             conda update -q conda
-            conda create --name mlops
+            conda create --name mlops2
 
             '''
         }
@@ -52,10 +52,11 @@ pipeline {
             sh """#!/bin/bash
                 
                 source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-                conda activate miniconda/envs/mlops/
+                conda activate mlops2
 
-                pip install -r requirements.txt
+                #pip install -r requirements.txt
 
+          
                 # Configure Databricks CLI for deployment
                 echo "${DBURL} $TOKEN" | databricks configure --token
 

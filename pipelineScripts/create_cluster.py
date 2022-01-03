@@ -5,9 +5,6 @@ import json
 
 class ClusterManager():
     def __init__(self) -> None:
-        
-        print('DBRKS_BEARER_TOKEN: ',os.environ['DBRKS_BEARER_TOKEN'])
-
         self.DBRKS_REQ_HEADERS = {
             'Authorization': 'Bearer ' + os.environ['DBRKS_BEARER_TOKEN'],
             'X-Databricks-Azure-Workspace-Resource-Id': '/subscriptions/'+ os.environ['DBRKS_SUBSCRIPTION_ID'] +'/resourceGroups/'+ os.environ['DBRKS_RESOURCE_GROUP'] +'/providers/Microsoft.Databricks/workspaces/' + os.environ['DBRKS_WORKSPACE_NAME'],
@@ -15,25 +12,25 @@ class ClusterManager():
         
         print("DBRKS_REQ_HEADERS", self.DBRKS_REQ_HEADERS)
 
-def create_cluster():
-    DBRKS_START_ENDPOINT = 'api/2.0/clusters/create'
-    postjson = """{
-        "cluster_name": "devops-cluster",
-        "spark_version": "7.3.x-scala2.12",
-        "node_type_id": "Standard_DS3_v2",
-        "autotermination_minutes": 10,
-        "autoscale" : {
-            "min_workers": 1,
-            "max_workers": 3
-        }
-    }"""
+    def create_cluster(self):
+        DBRKS_START_ENDPOINT = 'api/2.0/clusters/create'
+        postjson = """{
+            "cluster_name": "devops-cluster",
+            "spark_version": "7.3.x-scala2.12",
+            "node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 10,
+            "autoscale" : {
+                "min_workers": 1,
+                "max_workers": 3
+            }
+        }"""
 
-    response = requests.post("https://"+os.environ['DBRKS_INSTANCE']+".azuredatabricks.net/" + DBRKS_START_ENDPOINT, headers=DBRKS_REQ_HEADERS, json=json.loads(postjson))
-    if response.status_code != 200:
-        raise Exception(response.text)
-    
-    os.environ["DBRKS_CLUSTER_ID"] = response.json()["cluster_id"]    
-    print("##vso[task.setvariable variable=DBRKS_CLUSTER_ID;isOutput=true;]{b}".format(b=os.environ["DBRKS_CLUSTER_ID"]))
+        response = requests.post("https://"+os.environ['DBRKS_INSTANCE']+".azuredatabricks.net/" + DBRKS_START_ENDPOINT, headers=self.DBRKS_REQ_HEADERS, json=json.loads(postjson))
+        if response.status_code != 200:
+            raise Exception(response.text)
+        
+        os.environ["DBRKS_CLUSTER_ID"] = response.json()["cluster_id"]    
+        print("##vso[task.setvariable variable=DBRKS_CLUSTER_ID;isOutput=true;]{b}".format(b=os.environ["DBRKS_CLUSTER_ID"]))
        
 
 def list_clusters():
@@ -84,5 +81,6 @@ def manage_dbrks_cluster_state():
 
 if __name__ == "__main__":
     cm = ClusterManager()
+    cm.create_cluster()
 
 
