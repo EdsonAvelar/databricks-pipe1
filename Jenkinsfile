@@ -4,6 +4,7 @@ pipeline {
   environment {
     CONDA = "/home/adriano/anaconda3/condabin/conda"
     WORKSPACE = '.'
+    DBRKS_BEARER_TOKEN = "xyz"
   }
 
   stages {
@@ -20,10 +21,10 @@ pipeline {
             
             echo $PATH
 
-
             conda config --set always_yes yes --set changeps1 no
             conda update -q conda
-            conda create --name mlops
+            conda create --name mlopss
+
             '''
         }
 
@@ -36,7 +37,8 @@ pipeline {
             source $WORKSPACE/miniconda/etc/profile.d/conda.sh
             conda activate miniconda/envs/mlops/
 
-            python pipelineScripts/create_cluster.py
+            python pipelineScripts/create_cluster.py { WORKSPACE= $WORKSPACE }
+
             '''
           }
     }
