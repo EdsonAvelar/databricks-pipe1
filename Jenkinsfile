@@ -33,18 +33,7 @@ pipeline {
 
     }
 
-    stage('Install Requirements') {
-        steps {
-            sh '''#!/usr/bin/env bash
-            echo "Installing Requirements"  
-            source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-            conda activate miniconda/envs/mlops/
 
-            
-           '''
-        }
-
-    }
     
       stage('Configure Databricks') {
         steps {
