@@ -19,6 +19,7 @@ pipeline {
   stages {
     stage('Install Miniconda') {
         steps {
+
             sh '''#!/usr/bin/env bash
             echo "Inicianddo os trabalhos"  
             wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -nv -O miniconda.sh
@@ -89,7 +90,9 @@ pipeline {
    
     stage('Run Unit Tests') {
       steps {
-        try {
+
+        script {
+            try {
               sh """#!/bin/bash
                 source $WORKSPACE/miniconda/etc/profile.d/conda.sh
                 conda activate mlops2
@@ -103,6 +106,9 @@ pipeline {
               currentBuild.result = 'FAILURE'
             throw err
           }
+        }
+
+        
       }
     }
 
