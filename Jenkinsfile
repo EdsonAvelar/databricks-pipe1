@@ -123,9 +123,7 @@ pipeline {
                 export PATH="$HOME/.local/bin:$PATH"
                 echo $PATH
 
-                # Configure Databricks CLI for deployment
-                echo "${DBURL}
-                $TOKEN" | databricks configure --token
+                
 
                 # Configure Databricks Connect for testing
                 echo "${DBURL}
