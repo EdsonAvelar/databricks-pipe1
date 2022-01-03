@@ -135,7 +135,7 @@ pipeline {
                 ${CLUSTERID}
                 0
                 15001" | databricks-connect configure
-                  """
+                
           
                 python executenotebook.py --workspace=${DBURL}\
                       --token=$TOKEN\
