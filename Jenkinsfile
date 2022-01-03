@@ -63,6 +63,7 @@ pipeline {
 
                 #pip install -r requirements.txt
 
+                echo $PATH
           
                 # Configure Databricks CLI for deployment
                 echo "${DBURL} $TOKEN" | databricks configure --token
