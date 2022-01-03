@@ -17,13 +17,7 @@ pipeline {
 
                 echo $TOKEN
                 
-                source ${CONDAPATH}/bin/activate ${CONDAENV}
-
-                # Configure Databricks CLI for deployment
-                echo "${DBURL} $TOKEN" | databricks configure --token
-
-                # Configure Databricks Connect for testing
-                echo "${DBURL} $TOKEN ${CLUSTERID} 0 15001" | databricks-connect configure
+                
               """
            }
       }
