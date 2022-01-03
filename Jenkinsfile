@@ -8,6 +8,12 @@ pipeline {
     DBTOKEN="DBTOKEN"
     CLUSTERID="1228-220746-bqqkddxs"
     DBURL="https://adb-6840195589605290.10.azuredatabricks.net"
+
+  
+    TESTRESULTPATH="./teste_results"
+    LIBRARYPATH     = "./lib"
+
+    
   }
 
   stages {
@@ -45,6 +51,7 @@ pipeline {
 
             pip install --user databricks-cli
             pip install -U databricks-connect
+            pip install pytest
             databricks --version
 
            '''
@@ -78,5 +85,31 @@ pipeline {
            }
       }
     }
+
+   
+    stage('Run Unit Tests') {
+      steps {
+        try {
+              sh """#!/bin/bash
+                source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                conda activate mlops2
+
+                # Python tests for libs
+                python -m pytest --junit-xml=${TESTRESULTPATH}/TEST-libout.xml ${LIBRARYPATH}/test/test*.py || true
+                """
+          } catch(err) {
+            step([$class: 'JUnitResultArchiver', testResults: '--junit-xml=${TESTRESULTPATH}/TEST-*.xml'])
+            if (currentBuild.result == 'UNSTABLE')
+              currentBuild.result = 'FAILURE'
+            throw err
+          }
+      }
+    }
+
+
+
+
+
+
   } 
 }

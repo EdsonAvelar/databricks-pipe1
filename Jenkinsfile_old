@@ -9,7 +9,6 @@ pipeline {
     CLUSTERID = "1228-220746-bqqkddxs"
     DATABRICKS = "/home/adriano/anaconda3/bin/databricks"
     DBWORKSPACE = "/Users/edson.avelar@actdigital.com"
-
   }
 
   stages {
