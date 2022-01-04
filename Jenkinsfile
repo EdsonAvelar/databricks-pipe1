@@ -16,6 +16,7 @@ pipeline {
     WORKSPACEPATH   = "/Shared"
     DBFSPATH        = "dbfs:/FileStore/"
     BUILDPATH       = "${WORKSPACE}/Builds/${env.JOB_NAME}-${env.BUILD_NUMBER}"
+    SCRIPTPATH      = "./Scripts"
   }
 
   stages {
@@ -135,9 +136,8 @@ pipeline {
               sh """#!/bin/bash
                 source $WORKSPACE/miniconda/etc/profile.d/conda.sh
                 conda activate mlops2
-
                 export PATH="$HOME/.local/bin:$PATH"
-                echo $PATH
+
 
                 # Use Databricks CLI to deploy notebooks
                 databricks workspace import_dir --overwrite ${BUILDPATH}/Workspace ${WORKSPACEPATH}
@@ -145,6 +145,29 @@ pipeline {
                 """
             }
           }
+    }
+
+    stage('Run Integration Tests') {
+      steps {   
+          withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) {
+          
+          sh """#!/bin/bash
+                source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                conda activate mlops2
+                export PATH="$HOME/.local/bin:$PATH"
+
+                python3 ${SCRIPTPATH}/executenotebook.py --workspace=${DBURL}\
+                          --token=$TOKEN\
+                          --clusterid=${CLUSTERID}\
+                          --localpath=${NOTEBOOKPATH}/VALIDATION\
+                          --workspacepath=${WORKSPACEPATH}/VALIDATION\
+                          --outfilepath=${OUTFILEPATH}
+             """
+          }
+        sh """sed -i -e 's #ENV# ${OUTFILEPATH} g' ${SCRIPTPATH}/evaluatenotebookruns.py
+              python3 -m pytest --junit-xml=${TESTRESULTPATH}/TEST-notebookout.xml ${SCRIPTPATH}/evaluatenotebookruns.py || true
+           """
+      }
     }
 
     stage('Execute Notebook') {
@@ -168,7 +191,7 @@ pipeline {
                 0
                 15001" | databricks-connect configure
 
-                python executenotebook.py --workspace=${DBURL}\
+                python ${SCRIPTPATH}/executenotebook.py --workspace=${DBURL}\
                       --token=$TOKEN\
                       --clusterid=${CLUSTERID}\
                       --localpath=${NOTEBOOKPATH}\
