@@ -11,6 +11,10 @@ y = x.val
 
 # COMMAND ----------
 
+print('mod')
+
+# COMMAND ----------
+
 rf = RandomForestRegressor(50)
 rf.fit(x, y)
 
