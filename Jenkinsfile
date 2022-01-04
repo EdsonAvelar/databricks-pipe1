@@ -130,24 +130,26 @@ pipeline {
     }
 
     stage('Deploy') {
-          steps {        
-            sh """#!/bin/bash
-              source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-              conda activate mlops2
+          steps { 
+            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) {        
+              sh """#!/bin/bash
+                source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                conda activate mlops2
 
-              # Configure Databricks Connect
-              echo "${DBURL}
-              $TOKEN
-              ${CLUSTERID}
-              0
-              15001" | databricks-connect configure
+                # Configure Databricks Connect
+                echo "${DBURL}
+                $TOKEN
+                ${CLUSTERID}
+                0
+                15001" | databricks-connect configure
 
-              # Use Databricks CLI to deploy notebooks
-              databricks workspace import_dir --overwrite ${BUILDPATH}/Workspace ${WORKSPACEPATH}
-              dbfs cp -r ${BUILDPATH}/Libraries/python ${DBFSPATH}
-          """
+                # Use Databricks CLI to deploy notebooks
+                databricks workspace import_dir --overwrite ${BUILDPATH}/Workspace ${WORKSPACEPATH}
+                dbfs cp -r ${BUILDPATH}/Libraries/python ${DBFSPATH}
+            """
+            }
           }
-        }
+    }
 
     stage('Execute Notebook') {
       steps {
