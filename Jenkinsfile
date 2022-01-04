@@ -2,7 +2,6 @@ pipeline {
   agent any
 
   environment {
-    
     WORKSPACE           = '.'
     DBRKS_BEARER_TOKEN  = "xyz"
     DBTOKEN             ="DBTOKEN"
@@ -14,7 +13,7 @@ pipeline {
     OUTFILEPATH     = "./Validation/Output"
     NOTEBOOKPATH    = "./Notebooks"
     WORKSPACEPATH   = "/Shared"
-    DBFSPATH        = "dbfs:/FileStore/"
+    DBFSPATH        = "dbfs:/FileStore/tables/"
     BUILDPATH       = "${WORKSPACE}/Builds/${env.JOB_NAME}-${env.BUILD_NUMBER}"
     SCRIPTPATH      = "./Scripts"
   }
@@ -56,7 +55,6 @@ pipeline {
             pip install -U databricks-connect
             pip install pytest
             databricks --version
-
            '''
         }
 
@@ -130,6 +128,8 @@ pipeline {
 
     }
 
+    
+
     stage('Deploy') {
           steps { 
             withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) {        
@@ -137,7 +137,6 @@ pipeline {
                 source $WORKSPACE/miniconda/etc/profile.d/conda.sh
                 conda activate mlops2
                 export PATH="$HOME/.local/bin:$PATH"
-
 
                 # Use Databricks CLI to deploy notebooks
                 databricks workspace import_dir --overwrite ${BUILDPATH}/Workspace ${WORKSPACEPATH}
@@ -181,8 +180,6 @@ pipeline {
                 #pip install -r requirements.txt
                 export PATH="$HOME/.local/bin:$PATH"
                 echo $PATH
-
-                
 
                 # Configure Databricks Connect for testing
                 echo "${DBURL}
