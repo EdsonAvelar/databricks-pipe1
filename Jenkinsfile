@@ -136,16 +136,8 @@ pipeline {
                 source $WORKSPACE/miniconda/etc/profile.d/conda.sh
                 conda activate mlops2
 
-                # Configure Databricks CLI for deployment
-                echo "${DBURL}
-                $TOKEN" | databricks configure --token
-                
-                # Configure Databricks Connect
-                echo "${DBURL}
-                $TOKEN
-                ${CLUSTERID}
-                0
-                15001" | databricks-connect configure
+                export PATH="$HOME/.local/bin:$PATH"
+                echo $PATH
 
                 # Use Databricks CLI to deploy notebooks
                 databricks workspace import_dir --overwrite ${BUILDPATH}/Workspace ${WORKSPACEPATH}
