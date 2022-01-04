@@ -3,17 +3,18 @@ pipeline {
 
   environment {
     
-    WORKSPACE = '.'
-    DBRKS_BEARER_TOKEN = "xyz"
-    DBTOKEN="DBTOKEN"
-    CLUSTERID="1228-220746-bqqkddxs"
-    DBURL="https://adb-6840195589605290.10.azuredatabricks.net"
+    WORKSPACE           = '.'
+    DBRKS_BEARER_TOKEN  = "xyz"
+    DBTOKEN             ="DBTOKEN"
+    CLUSTERID           ="1228-220746-bqqkddxs"
+    DBURL               ="https://adb-6840195589605290.10.azuredatabricks.net"
 
-    TESTRESULTPATH="./teste_results"
+    TESTRESULTPATH  ="./teste_results"
     LIBRARYPATH     = "./Libraries"
     OUTFILEPATH     = "./Validation/Output"
-    NOTEBOOKPATH = "./Notebooks"
+    NOTEBOOKPATH    = "./Notebooks"
     WORKSPACEPATH   = "/Shared"
+    BUILDPATH       = "${WORKSPACE}/Builds/${env.JOB_NAME}-${env.BUILD_NUMBER}"
   }
 
   stages {
@@ -28,7 +29,6 @@ pipeline {
             bash miniconda.sh -b -p $WORKSPACE/miniconda
             
             export PATH="$WORKSPACE/miniconda/bin:$PATH"
-            
             echo $PATH
 
             conda config --set always_yes yes --set changeps1 no
@@ -108,6 +108,24 @@ pipeline {
           }
         }
       }
+    }
+
+    stage('Build Artifact') {
+        steps {
+            sh """mkdir -p "${BUILDPATH}/Workspace"
+              mkdir -p "${BUILDPATH}/Libraries/python"
+              mkdir -p "${BUILDPATH}/Validation/Output"
+              
+              cp ${WORKSPACE}/Workspace/*.ipynb ${BUILDPATH}/Workspace
+    
+              # Get packaged libs
+              find ${LIBRARYPATH} -name '*.whl' | xargs -I '{}' cp '{}' ${BUILDPATH}/Libraries/python/
+
+              # Generate artifact
+              # tar -czvf Builds/latest_build.tar.gz ${BUILDPATH}
+           """
+        }
+
     }
 
     stage('Execute Notebook') {
