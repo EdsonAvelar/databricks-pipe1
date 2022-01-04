@@ -14,6 +14,7 @@ pipeline {
     OUTFILEPATH     = "./Validation/Output"
     NOTEBOOKPATH    = "./Notebooks"
     WORKSPACEPATH   = "/Shared"
+    DBFSPATH        = "dbfs:/FileStore/"
     BUILDPATH       = "${WORKSPACE}/Builds/${env.JOB_NAME}-${env.BUILD_NUMBER}"
   }
 
@@ -88,7 +89,7 @@ pipeline {
     }
 
    
-    stage('Run Unit Tests') {
+    stage('Unit Tests') {
       steps {
 
         script {
@@ -122,12 +123,25 @@ pipeline {
               find ${LIBRARYPATH} -name '*.whl' | xargs -I '{}' cp '{}' ${BUILDPATH}/Libraries/python/
 
               # Generate artifact
-              # tar -czvf Builds/latest_build.tar.gz ${BUILDPATH}
+              #tar -czvf Builds/latest_build.tar.gz ${BUILDPATH}
            """
         }
 
     }
 
+    stage('Deploy') {
+          steps {        
+            sh """#!/bin/bash
+              source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+              conda activate mlops2
+
+              # Use Databricks CLI to deploy notebooks
+              databricks workspace import_dir --overwrite ${BUILDPATH}/Workspace ${WORKSPACEPATH}
+              dbfs cp -r ${BUILDPATH}/Libraries/python ${DBFSPATH}
+          """
+          }
+        }
+        
     stage('Execute Notebook') {
       steps {
            withCredentials([string(credentialsId: DBTOKEN, variable: 'TOKEN')]) { 
